@@ -1,7 +1,5 @@
 # VEM: Environment-Free Exploration for Training GUI Agent with Value Environment Model
 
-[![Project](http://img.shields.io/badge/Project-VEM-E3E4C8.svg)](https://microsoft.github.io/GUI-Agent-RL/)
-[![Paper](http://img.shields.io/badge/Paper-arxiv.2502.18906-99D4C8.svg)](https://www.arxiv.org/pdf/2502.18906)
 
 We propose an environment-free RL framework that decouples value estimation from policy optimization by leveraging a pretrained Value Environment Model (VEM). VEM predicts state-action values directly from offline data, distilling human-like priors about GUI interaction outcomes without requiring next-state prediction or environmental feedback. The framework operates in two stages: (1) pretraining VEM to estimate long-term action utilities and (2) guiding policy exploration with frozen VEM signals, enabling layout-agnostic GUI automation.
 
@@ -31,7 +29,7 @@ Download the checkpoints from:
 - [Auto-UI-Base](https://huggingface.co/cooelf/Auto-UI/tree/main) (choose the base version)
 - [BLIP2-OPT-2.7B](https://huggingface.co/Salesforce/blip2-opt-2.7b)
 - [RoBERTa-Base](https://huggingface.co/FacebookAI/roberta-base)
-- [Qwen2-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
+- [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)
 
 Organize the files as follows:
 ```plaintext
@@ -45,7 +43,7 @@ GUI-Agent-RL/
       Auto-UI-Base/
       blip2-opt-2.7b/
       roberta-base/
-      Qwen2-VL-7B-Instruct/
+      Qwen2.5-VL-7B-Instruct/
 ```
 
 ### Step 4: Train the Critic Model
@@ -90,39 +88,3 @@ Please modify the save_path to point to the exact checkpoints you want to evalua
     python3 eval_online.py --task general
     python3 eval_online.py --task webshopping
     ```
-
-## Citation
-If you find this repository useful, please considering giving ⭐ or citing:
-```
-@misc{zheng2025vemenvironmentfreeexplorationtraining,
-      title={VEM: Environment-Free Exploration for Training GUI Agent with Value Environment Model}, 
-      author={Jiani Zheng and Lu Wang and Fangkai Yang and Chaoyun Zhang and Lingrui Mei and Wenjie Yin and Qingwei Lin and Dongmei Zhang and Saravan Rajmohan and Qi Zhang},
-      year={2025},
-      eprint={2502.18906},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2502.18906}, 
-}
-```
-
-## Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
