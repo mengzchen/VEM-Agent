@@ -1,0 +1,14 @@
+### model
+model_name_or_path: /model/huggingface/hub/Qwen2.5-VL-7B-Instruct
+
+adapter_name_or_path: /your/path/to/adapter
+template: qwen2_vl
+finetuning_type: lora
+
+### export
+export_dir: /your/path/to/export
+export_size: 2
+export_device: cpu
+export_legacy_format: false
+
+# llamafactory-cli export configs/critic_merge_general.yaml

@@ -1,0 +1,10 @@
+{
+  "critic_train_m2w": {
+    "file_name": "/path/mm-mind2web/mind2web_anns/train_critic.jsonl",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "critic_inputs",
+      "images": "critic_images"
+    }
+  }
+}

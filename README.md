@@ -12,7 +12,7 @@ We propose an environment-free RL framework that decouples value estimation from
 ### Step 1: Build Environment
 ```bash
 conda env create -f environment.yml
-conda activate lam-rl
+conda activate vem
 
 git clone https://github.com/hiyouga/LLaMA-Factory.git 
 cd LLaMA-Factory
@@ -20,34 +20,36 @@ pip install -e ".[torch,metrics]"
 ```
 
 ### Step 2: Prepare Images and Annotations
-- Download raw images from [SeeClick Website](https://box.nju.edu.cn/f/96ba5115bae24eaaa44e/) and place them under `images/aitw_images`.
+
+In this part we follow [SeeClick](https://github.com/njucckevin/SeeClick)
+
+#### Download Screenshots and Annotations
+
+* Mind2Web: Download the [screenshots](https://box.nju.edu.cn/f/33e203d170ab48b0b922/) and [annotations](https://box.nju.edu.cn/f/e30b861fa7604668821b/) (train set and test set of Domain/Website/Task). 
+Note that according to [mind2web](https://github.com/OSU-NLP-Group/Mind2Web), please **DO NOT** redistribute the unzipped data files online.
+
+* AITW: Download the [screenshots](https://box.nju.edu.cn/f/96ba5115bae24eaaa44e/) and [annotations](https://box.nju.edu.cn/f/1245c74fc09b4565a235/) (train/val/test).
+Check the origin [AITW](https://github.com/google-research/google-research/tree/master/android_in_the_wild) project for details and data usage.
+
+#### Data Process
+
 - To get the labeled data for training the critic model, fill in the `api_key` and `model_name` in `configs/gpt_config.yaml`.
-- Then run `python3 data_preprocess/aitw.py` to generate the data for training the critic model and policy model.
+- For AITW, run `python3 data_preprocess/aitw.py` to generate the data for training the critic model and policy model. For Mind2Web, run `m2w_process_data.py`
 
 ### Step 3: Prepare Checkpoints
+
 Download the checkpoints from:
 - [Auto-UI-Base](https://huggingface.co/cooelf/Auto-UI/tree/main) (choose the base version)
 - [BLIP2-OPT-2.7B](https://huggingface.co/Salesforce/blip2-opt-2.7b)
 - [RoBERTa-Base](https://huggingface.co/FacebookAI/roberta-base)
 - [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)
-
-Organize the files as follows:
-```plaintext
-GUI-Agent-RL/
-    data/
-      aitw_anns/
-      images/
-    images/
-      aitw_images/
-    checkpoints/
-      Auto-UI-Base/
-      blip2-opt-2.7b/
-      roberta-base/
-      Qwen2.5-VL-7B-Instruct/
-```
+- [Qwen2.5-VL-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct)
 
 ### Step 4: Train the Critic Model
 We use the LLaMA-Factory to train the critic model. Based on our settings, this requires 8 A100 GPUs and uses LoRA for training.
+
+#### AITW 
+
 - To obtain the critic model checkpoint for the AITW general task, run:
   ```bash
   sh scripts/train_critic_general.sh
@@ -59,9 +61,20 @@ We use the LLaMA-Factory to train the critic model. Based on our settings, this 
   ```
   The critic checkpoints will be stored in `checkpoints/critic_webshopping`.
 
+#### MM-Mind2Web
+
+To obtain the critic model checkpoint for the MM-Mind2Web, run:
+
+```
+sh scripts/train_critic.sh
+```
+
 You can modify the output path by changing the `output_dir` in the YAML file. Remember to fill in the `adapter_name_or_path` and `export_dir` in `configs/critic_merge.yaml` when merging LoRA.
 
 ### Step 5: Train the Policy Model
+
+#### AITW
+
 After obtaining the critic model, we use AutoGUI as the base policy model for training:
 ```bash
 python3 train.py --task general
@@ -69,7 +82,24 @@ python3 train.py --task webshopping
 ```
 Checkpoints are saved in `checkpoints/policy_general` and `checkpoints/policy_webshopping` by default.
 
+#### MM-Mind2Web
+
+Use VLLM to run the critic model as a API server:
+
+```bash
+bash run_vllm_critic.sh
+```
+
+Then run the policy model training:
+
+```bash
+python3 train.py
+```
+
 ### Step 6: Evaluation
+
+#### AITW
+
 - **Offline Evaluation**
 Please modify the save_path to point to the exact checkpoints you want to evaluate (which you obtained in Step 5).
   ```bash
@@ -88,3 +118,7 @@ Please modify the save_path to point to the exact checkpoints you want to evalua
     python3 eval_online.py --task general
     python3 eval_online.py --task webshopping
     ```
+
+#### MM-Mind2Web
+
+We use the same evaluation code as [SeeClick](https://github.com/njucckevin/SeeClick), just see [mind2web_test.py](https://github.com/njucckevin/SeeClick/blob/main/agent_tasks/mind2web_test.py)

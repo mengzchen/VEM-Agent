@@ -1,4 +1,4 @@
-name: lam-rl
+name: vem
 channels:
   - defaults
 dependencies:

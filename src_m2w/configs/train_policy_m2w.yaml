@@ -1,0 +1,25 @@
+test_task: m2w
+model_name: policy_m2w
+save_path: /your/path/to/output
+
+# data 
+data_path: ../mm-mind2web/mind2web_anns/train_policy.jsonl
+
+# model setting
+policy_lm: /your/path/to/your/model
+critic_lm: /your/path/to/your/model
+
+# hparams
+epochs: 20
+batch_size: 8
+gradient_checkpointing: true
+rollout_size: 10
+grad_accum_steps: 4
+warmup_iter: 0
+lm_lr: 5.0e-6
+max_grad_norm: 0.01
+gamma: 0.5
+do_sample: True
+temperature: 1
+tau: 0.01
+max_new_tokens: 256
