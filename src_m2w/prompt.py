@@ -1,5 +1,5 @@
 action_prompt = (
-    "You are a reasoning web GUI agent. In this UI screenshot, I want you to continue executing the command \"{text}\", with the action history being \"{action_history}\".\n"
+    "You are a reasoning web GUI agent. In this UI screenshot, I want you to continue executing the command \"{task}\", with the action history being \"{action_history}\".\n"
     "Please provide the action to perform (enumerate in [\"click\", \"select\", \"type\"]), the point where the cursor is moved to (integer), and any value required to complete the action.\n"
     "Output the the final answer in as follows:\n"
     "```json{\"action_type\": enum[\"click\", \"select\", \"type\"], \"click_point\": [x, y], \"value\": \"text to type, or option to select\"}```\n"

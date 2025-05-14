@@ -120,7 +120,7 @@ class QwenPolicyTrainer:
 
         real_policy_inputs = []
         for task, actions in zip(policy_inputs['task'], policy_inputs['previous_actions']):
-            real_policy_inputs.append(action_prompt.replace("{{task}}", task).replace("{{action_history}}", actions))
+            real_policy_inputs.append(action_prompt.replace("{task}", task).replace("{action_history}", actions))
         # Calculate log probability
         log_prob = self.agent.get_log_prob(
             texts=real_policy_inputs,
@@ -147,7 +147,7 @@ class QwenPolicyTrainer:
         # print(f"### log_prob shape: {log_prob.shape}, q_values shape: {q_values.shape}")
 
         # 3. Policy Gradient loss
-        pg_loss = - torch.mean(log_prob * q_values) / 100.0   # set your own scale
+        pg_loss = - torch.mean(log_prob * q_values) / 50.0   # you can set your own scale
 
         # print(f"### pg_loss: {pg_loss}")
 
@@ -234,7 +234,7 @@ class QwenPolicyTrainer:
                 # print(f"### task: {task}")
                 # print(f"### actions: {actions}")
                 # input("stop here")
-                action_prompt_input = action_prompt.replace("{{task}}", task).replace("{{action_history}}", actions)
+                action_prompt_input = action_prompt.replace("{task}", task).replace("{action_history}", actions)
                 texts.append(action_prompt_input)
             
             # print(f"### texts: {texts}")

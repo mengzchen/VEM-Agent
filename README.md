@@ -121,4 +121,4 @@ Please modify the save_path to point to the exact checkpoints you want to evalua
 
 #### MM-Mind2Web
 
-We use the same evaluation code as [SeeClick](https://github.com/njucckevin/SeeClick), just see [mind2web_test.py](https://github.com/njucckevin/SeeClick/blob/main/agent_tasks/mind2web_test.py)
+We use the same evaluation code as [SeeClick](https://github.com/njucckevin/SeeClick), see [mind2web_test.py](https://github.com/njucckevin/SeeClick/blob/main/agent_tasks/mind2web_test.py), run the MM-Mind2Web evaluation by `python test_mind2web.py`.
