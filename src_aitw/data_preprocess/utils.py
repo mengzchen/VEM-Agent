@@ -32,7 +32,7 @@ class AndroidAction():
 
 action_type_dict = {
     "type": "TYPE",
-    "click": "DUAL_POINT",
+    "click": "CLICK",
     "press back": "PRESS_BACK",
     "press home": "PRESS_HOME",
     "press enter": "PRESS_ENTER",
@@ -90,7 +90,7 @@ def update_trajectory(anns, results):
 def action_dict_to_class(action_dict):
     action_type = action_dict["action_type"]
     
-    if action_type == 'DUAL_POINT':
+    if action_type == 'CLICK':
         action_class = AndroidAction(action_type=ActionType.DualPoint, touch_point=action_dict["touch_point"][::-1], lift_point=action_dict["lift_point"][::-1])
     elif action_type == 'TYPE':
         action_class = AndroidAction(action_type=ActionType.Type, typed_text=action_dict["typed_text"])
@@ -173,7 +173,7 @@ def to_autoui(act: AndroidAction, all_dict):
             return ""
     else:
         if act.action_type == ActionType.DualPoint:
-            return f'"action_type": "DUAL_POINT", "click_point": "[{act.touch_point[1]:.4f}, {act.touch_point[0]:.4f}]"'
+            return f'"action_type": "CLICK", "click_point": "[{act.touch_point[1]:.4f}, {act.touch_point[0]:.4f}]"'
         elif act.action_type == ActionType.Type:
             return f'"action_type": "TYPE", "typed_text": "{act.typed_text}"'
         elif act.action_type == ActionType.GoBack:

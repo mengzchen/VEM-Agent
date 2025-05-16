@@ -14,12 +14,6 @@ from prompt import prompt_critic_system, prompt_critic_user
 import re
 
 def extract_answer(text):
-    """
-    Extract content between ```json ``` tags from a string.
-    If not found, return:
-    1. If there are no ``` markers or only one ``` marker, return the original string (trimmed of whitespace).
-    2. If there are paired ``` markers, extract the content between them.
-    """
     # Attempt to extract using standard format
     text = text.replace("```json", "```")
     match = re.search(r'```(.*?)```', text, re.DOTALL)
@@ -50,8 +44,6 @@ def write_json(anns: List, wpath: str):
 def add_visilize2screenshot(image_rpath, ann, tag):
     """Add visualization markers to screenshots for the mind2web dataset"""
 
-    # print(f"ann: {ann}")
-    # input("stop here")
     if type(ann) == dict:
         # Process mind2web format actions
         if "operation" not in ann or ann["operation"]["original_op"] not in ['CLICK', 'TYPE', 'SELECT', 'HOVER', 'ENTER']:
@@ -67,9 +59,7 @@ def add_visilize2screenshot(image_rpath, ann, tag):
             bbox["y"] + bbox["height"]/2
         ]
     else:
-        # print(f"### ann: {ann}")
-        # print(f"### type(ann): {type(ann)}")
-        # input("stop here")
+
         try:
             ann = json.loads(ann)
         except Exception as e:
@@ -97,17 +87,10 @@ def add_visilize2screenshot(image_rpath, ann, tag):
     x = int(float(click_point[0]))
     y = int(float(click_point[1]))
 
-
-    # print(f"### click_point: {click_point}")
-
-    # Draw a semi-transparent red circle at the click position (BGR color format, last value is transparency)
     overlay = image.copy()
     cv2.circle(overlay, (x, y), 20, (0, 0, 255), -1)
     alpha = 0.5  # 50% transparency
     cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0, image)
-
-    # print(f"image_rpath: {image_rpath}")
-    # input("stop here")
 
     image_wpath = image_rpath.split(".jpg")[0] + f"_{tag}.png"
     cv2.imwrite(image_wpath, image) 
@@ -235,16 +218,9 @@ def plot_loss(log_dir: str, keys: List[str] = ["loss"]) -> None:
 
 
 def update_trajectory(anns, results):
-    """
-    Update trajectory information in anns, adding critic_input, policy_output, and critic_image fields.
-    """
-
     assert len(results) == len(anns)
 
     for (result, ann) in zip(results, anns):
-        # print(f"### result: {result}")
-        # print(f"### ann: {ann}")
-        # input("stop here")
         history_action_desc = ""
         for i in range(ann["step_id"] - 1):
             history_action_desc += f"step {i}: {ann['action_desc_list'][i]}\n"
@@ -252,14 +228,8 @@ def update_trajectory(anns, results):
         ann["critic_input"] = prompt_critic_system + prompt_critic_user.format(ann["task"], history_action_desc, result["output"])
         ann["policy_output"] = result["output"]
         try:
-            # print(f"### result['output']: {result['output']}")
-            # input("stop here")
             output = extract_answer(result["output"])
-            # print(f"### output: {output}")
-            # input("stop here")
             ann["critic_image"] = add_visilize2screenshot(ann["policy_image"], output, "policy")
-            # print(f"### ann['critic_image']: {ann['critic_image']}")
-            # input("stop here")
         except Exception as e:
             print(f"### update_trajectory error: {e}")
             ann["critic_image"] = ann["policy_image"]

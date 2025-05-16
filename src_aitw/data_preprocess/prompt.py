@@ -4,8 +4,8 @@ prompt_score_system ="""As an expert in the field of GUI and reinforcement learn
 1. Task: Brief description of the current GUI task, such as implementing the "Get Hong Kong hotel prices" task in Android GUI.
 2. Complete operation description and corresponding screenshot sequence for the task
    (1) Text description of operations: Contains 11 types of GUI operations. Specific fields and their meanings are as follows:
-      [1] DUAL_POINT: Double-click on a specific position on the screen. If it is a link or software, it will enter; if it is text, it will be selected. The "click_point" is represented by a two-dimensional array indicating the position of the click, relative to the top-left corner of the screenshot and within a range from 0.0 to 1.0.
-         - example: "action_type": "DUAL_POINT", "click_point": [0.5, 0.5]
+      [1] CLICK: Click on a specific position on the screen. If it is a link or software, it will enter; if it is text, it will be selected. The "click_point" is represented by a two-dimensional array indicating the position of the click, relative to the top-left corner of the screenshot and within a range from 0.0 to 1.0.
+         - example: "action_type": "CLICK", "click_point": [0.5, 0.5]
       [2] TYPE: An action type that sends text. Note that this simply sends text and does not perform any clicks for element focus or enter presses for submitting text.
          - example: "action_type": "TYPE", "typed_text": "capital of England"
       [3] PRESS_BACK: Return to the previous page. Usually the previous webpage.
@@ -26,7 +26,7 @@ prompt_score_system ="""As an expert in the field of GUI and reinforcement learn
          - example: "action_type": "SCROLL_LEFT"
       [11] SCROLL_RIGHT: Scroll right.
          - example: "action_type": "SCROLL_RIGHT"
-   (2) Corresponding screenshot before each operation. If the operation is of the "DUAL_POINT" type, the click position is marked with a red dot in the image.    
+   (2) Corresponding screenshot before each operation. If the operation is of the "CLICK" type, the click position is marked with a red dot in the image.    
 3. The current action to be evaluated and the corresponding screenshot.
 
 ## Evaluation Criteria:
@@ -47,7 +47,7 @@ Here are the detailed descriptions of the two levels. Attention needs to be paid
 ## Example Input:
 Task Requirements: What is the capital of England?
 Action and ScreenShot:
-step 0: "action_type": "DUAL_POINT", "click_point": "[0.524, 0.06]"
+step 0: "action_type": "CLICK", "click_point": "[0.524, 0.06]"
 step 1: "action_type": "TYPE", "typed_text": "capital of England"
 step 2: "action_type": "PRESS_ENTER"
 step 3: "action_type": "STATUS_TASK_COMPLETE"
@@ -73,8 +73,8 @@ prompt_critic_system = """As an expert in the field of GUI and reinforcement lea
 1. Task: Brief description of the current GUI task, such as implementing the "Get Hong Kong hotel prices" task in Android GUI.
 2. Description of History operation
    Contains 11 types of GUI operations. Specific fields and their meanings are as follows:
-   [1] DUAL_POINT: Double-click on a specific position on the screen. If it is a link or software, it will enter; if it is text, it will be selected. The "click_point" is represented by a two-dimensional array indicating the position of the click, relative to the top-left corner of the screenshot and within a range from 0.0 to 1.0.
-      - example: "action_type": "DUAL_POINT", "click_point": [0.5, 0.5]
+   [1] CLICK: Click on a specific position on the screen. If it is a link or software, it will enter; if it is text, it will be selected. The "click_point" is represented by a two-dimensional array indicating the position of the click, relative to the top-left corner of the screenshot and within a range from 0.0 to 1.0.
+      - example: "action_type": "CLICK", "click_point": [0.5, 0.5]
    [2] TYPE: An action type that sends text. Note that this simply sends text and does not perform any clicks for element focus or enter presses for submitting text.
       - example: "action_type": "TYPE", "typed_text": "capital of England"
    [3] PRESS_BACK: Return to the previous page. Usually the previous webpage.
@@ -95,7 +95,7 @@ prompt_critic_system = """As an expert in the field of GUI and reinforcement lea
       - example: "action_type": "SCROLL_LEFT"
    [11] SCROLL_RIGHT: Scroll right.
       - example: "action_type": "SCROLL_RIGHT"
-3. The current action to be evaluated and the corresponding screenshot(the screenshot before each operation. If the operation is of the "DUAL_POINT" type, the click position is marked with a red dot in the image.)
+3. The current action to be evaluated and the corresponding screenshot(the screenshot before each operation. If the operation is of the "CLICK" type, the click position is marked with a red dot in the image.)
 
 ## Evaluation Criteria:
 Here are the detailed descriptions of the two levels. Attention needs to be paid to whether the action taken based on the current screenshot promotes efficient task execution, rather than the relevance of the content shown in the current screenshot to the task:
@@ -113,7 +113,7 @@ Here are the detailed descriptions of the two levels. Attention needs to be paid
 ## Example Input:
 Task Requirements: What is the capital of England?
 Previous Action:
-step 0: "action_type": "DUAL_POINT", "click_point": "[0.524, 0.06]"
+step 0: "action_type": "CLICK", "click_point": "[0.524, 0.06]"
 step 1: "action_type": "TYPE", "typed_text": "capital of England"
 Current Action and Screenshot:
 step 2: "action_type": "PRESS_ENTER"
